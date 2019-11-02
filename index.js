@@ -31,8 +31,6 @@ const router = new Router();
  */
 
 // DB 연결
-/*
-TODO : 스키마 작업 완료 하고 주석 풀기
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
@@ -44,7 +42,7 @@ mongoose.connect(process.env.MONGO_URL, {
     .catch(error => {
         console.log('[mongoDB] : ' + error);
     });
-*/
+
 
 // 라우팅 설정
 app

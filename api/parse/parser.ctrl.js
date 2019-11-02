@@ -20,7 +20,9 @@ exports.getData = async (ctx) => {
 
     // 컴시간 정보 불러오기
     // TODO : 컴시간표 API 서버의 응답이 올 때 까지 API 응답을 늦추기
+    // TODO : 새로운 개발 API 만들기
 
+    /*
     var data = "";
 
     (async () => {
@@ -36,9 +38,10 @@ exports.getData = async (ctx) => {
         // console.log(JSON.stringify(time));
 
         data = JSON.stringify(result[dataGrade][dataClass]) + JSON.stringify(time);
-    })().then(ctx.body = data);
+    })();
 
-    // ctx.body = data;
+    ctx.body = data;
+    */
 
 };
 

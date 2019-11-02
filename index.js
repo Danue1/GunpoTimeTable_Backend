@@ -75,7 +75,7 @@ router.use('/api', api.routes());
 timetable.init().then(() => {
     console.log('[comcogan-parser] : 초기화 완료');
     timetable.setSchool('군포e비즈니스고등학교').then(() => {
-        console.log('[comcigan-parser] : 학고 설정 완료')
+        console.log('[comcigan-parser] : 학교 설정 완료')
     });
 });
 

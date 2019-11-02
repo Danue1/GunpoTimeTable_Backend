@@ -69,10 +69,16 @@ router.get('/sub', (ctx, next) => {
     ctx.body = '서브페이지';
 });
 
-router.use('./api', api.routes());
+// API 라우팅
+router.use('/api', api.routes());
 
-app.use(router.routes());
-app.use(router.allowedMethods());
+// 컴시간 모듈 초기화 및 기본 설정
+timetable.init().then(() => {
+    console.log('[comcogan-parser] : 초기화 완료');
+    timetable.setSchool('군포e비즈니스고등학교').then(() => {
+        console.log('[comcigan-parser] : 학고 설정 완료')
+    });
+});
 
 // api 호출 부분
 app.listen(port, ()=>{

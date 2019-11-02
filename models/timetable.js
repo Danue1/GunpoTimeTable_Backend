@@ -12,3 +12,5 @@ const TimeTable = new Schema({
         type : String
     }
 });
+
+exports.timetableModel = mongoose.model('DBtimetable', TimeTable);

@@ -66,7 +66,6 @@ app.listen(port, () => {
 });
 
 // DB에 업로드 하는 함수
-// TODO : https://github.com/leeduyoung/koa-mongo-seed/blob/master/src/api/auth/auth.ctrl.js 에서 DB 조작하는 함수 찾기
 (async () => {
     await timetable.init();
     await timetable.setSchool('군포e비즈니스고등학교');
@@ -95,4 +94,6 @@ app.listen(port, () => {
         "timetable" : dataTimeTable,
         "checksum" : dataHash
     };
+    
+    // TODO : DB 업로드 하는 기능 구현하기
 })();

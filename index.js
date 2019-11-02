@@ -29,8 +29,8 @@ const router = new Router();
 const Timetable = require('comcigan-parser');
 const timetable = new Timetable();
 
-/*
- * 경로의 값을 알아오는 방법 : ctx.params
+// sha 인코딩
+const crypto = require('crypto');
  * 쿼리 스트링일 경우 : ctx.requset.query
  */
 
@@ -71,10 +71,10 @@ router.get('/sub', (ctx, next) => {
 
     // 시간표 조회
     const result = await timetable.getTimetable();
-    
+
     // 시간 조회
     const time = await timetable.getClassTime();
-    
+
     // 시간표 + 시간 정보 입력
     const data = JSON.stringify(result) + JSON.stringify(time);
 
@@ -82,16 +82,17 @@ router.get('/sub', (ctx, next) => {
     const dataTimeTable = Math.round((new Date()).getTime() / 1000);
 
     // hash
-    const dataHash = (function hash("data") {
-       return crypto.createHmac('sha512', process.env.SCREAT_KEY).update(checksum).digest('hex');
-    });
+    const dataHash = function hash(checksum) {
+        return crypto.createHmac('sha512', process.env.SCREAT_KEY)
+            .update(checksum)
+            .digest('hex');
+    };
 
-    let data = null;
-    try {
-        data = await
-    } catch (e) {
-        chx.throw(500, e);
-    }
+    const query = {
+        "data" : data,
+        "timetable" : dataTimeTable,
+        "checksum" : dataHash
+    };
 })();
 
 // API 라우팅

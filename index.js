@@ -31,8 +31,6 @@ const timetable = new Timetable();
 
 // sha 인코딩
 const crypto = require('crypto');
- * 쿼리 스트링일 경우 : ctx.requset.query
- */
 
 // DB 연결
 mongoose.Promise = global.Promise;
@@ -59,8 +57,12 @@ router.get('/', (ctx, next) => {
     ctx.body = '루트페이지';
 });
 
-router.get('/sub', (ctx, next) => {
-    ctx.body = '서브페이지';
+// API 라우팅
+router.use('/api', api.routes());
+
+// 서버 활성 상태 확인
+app.listen(port, () => {
+    console.log('[koa] : listen to ' + port);
 });
 
 // DB에 업로드 하는 함수
@@ -94,11 +96,3 @@ router.get('/sub', (ctx, next) => {
         "checksum" : dataHash
     };
 })();
-
-// API 라우팅
-router.use('/api', api.routes());
-
-// 서버 활성 상태 확인
-app.listen(port, () => {
-    console.log('[koa] : listen to ' + port);
-});

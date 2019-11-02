@@ -25,7 +25,8 @@ const app = new koa();
 const Router = require("koa-router");
 const router = new Router();
 
-/* 주로 사용될 comcigan-parser
+/*
+ * 주로 사용될 comcigan-parser
  * https://github.com/leegeunhyeok/comcigan-parser.git
  */
 const Timetable = require('comcigan-parser');
@@ -34,8 +35,6 @@ const timetable = new Timetable();
 /*
  * 경로의 값을 알아오는 방법 : ctx.params
  * 쿼리 스트링일 경우 : ctx.requset.query
- * 
- *
  */
 
 // DB 연결
@@ -54,7 +53,7 @@ mongoose.connect(process.env.MONGO_URL, {
     });
 */
 
-// API 부분
+// 라우팅 설정
 app
     .use(bodyParser())
     .use(router.routes())
@@ -80,7 +79,7 @@ timetable.init().then(() => {
     });
 });
 
-// api 호출 부분
-app.listen(port, ()=>{
-   console.log('[koa] : listen to ' + port);
+// 서버 활성 상태 확인
+app.listen(port, () => {
+    console.log('[koa] : listen to ' + port);
 });

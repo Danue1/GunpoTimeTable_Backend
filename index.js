@@ -13,6 +13,10 @@ require('dotenv').config();
 const port = process.env.PORT || 4001;
 const mongoose = require('mongoose');
 
+// API에 사용되는 koa-bodyparser 모듈
+const bodyParser = require('koa-bodyparser');
+const api = require('./api');
+
 // 미들웨어로 사용할 koa
 const koa = require('koa');
 const app = new koa();
@@ -50,6 +54,12 @@ mongoose.connect(process.env.MONGO_URL, {
     });
 */
 
+// API 부분
+app
+    .use(bodyParser())
+    .use(router.routes())
+    .use(router.allowedMethods());
+
 // 라우터
 router.get('/', (ctx, next) => {
     ctx.body = '루트페이지';
@@ -58,6 +68,8 @@ router.get('/', (ctx, next) => {
 router.get('/sub', (ctx, next) => {
     ctx.body = '서브페이지';
 });
+
+router.use('./api', api.routes());
 
 app.use(router.routes());
 app.use(router.allowedMethods());

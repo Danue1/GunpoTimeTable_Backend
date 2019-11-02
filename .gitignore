@@ -1,2 +1,5 @@
-
+# 노드 모듈
 node_modules/
+
+# db 적용 안함
+db/

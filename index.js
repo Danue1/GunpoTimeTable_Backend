@@ -75,6 +75,6 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 // api 호출 부분
-app.listen(4000, ()=>{
-   console.log('[koa] : success');
+app.listen(port, ()=>{
+   console.log('[koa] : listen to ' + port);
 });

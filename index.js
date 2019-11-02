@@ -26,13 +26,6 @@ const Router = require("koa-router");
 const router = new Router();
 
 /*
- * 주로 사용될 comcigan-parser
- * https://github.com/leegeunhyeok/comcigan-parser.git
- */
-const Timetable = require('comcigan-parser');
-const timetable = new Timetable();
-
-/*
  * 경로의 값을 알아오는 방법 : ctx.params
  * 쿼리 스트링일 경우 : ctx.requset.query
  */
@@ -70,14 +63,6 @@ router.get('/sub', (ctx, next) => {
 
 // API 라우팅
 router.use('/api', api.routes());
-
-// 컴시간 모듈 초기화 및 기본 설정
-timetable.init().then(() => {
-    console.log('[comcogan-parser] : 초기화 완료');
-    timetable.setSchool('군포e비즈니스고등학교').then(() => {
-        console.log('[comcigan-parser] : 학교 설정 완료')
-    });
-});
 
 // 서버 활성 상태 확인
 app.listen(port, () => {

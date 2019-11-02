@@ -3,3 +3,4 @@ node_modules/
 
 # db 적용 안함
 db/
+.env

@@ -25,6 +25,10 @@ const app = new koa();
 const Router = require("koa-router");
 const router = new Router();
 
+// comcigan-parser (https://github.com/leegeunhyeok/comcigan-parser)
+const Timetable = require('comcigan-parser');
+const timetable = new Timetable();
+
 /*
  * 경로의 값을 알아오는 방법 : ctx.params
  * 쿼리 스트링일 경우 : ctx.requset.query
@@ -58,6 +62,37 @@ router.get('/', (ctx, next) => {
 router.get('/sub', (ctx, next) => {
     ctx.body = '서브페이지';
 });
+
+// DB에 업로드 하는 함수
+// TODO : https://github.com/leeduyoung/koa-mongo-seed/blob/master/src/api/auth/auth.ctrl.js 에서 DB 조작하는 함수 찾기
+(async () => {
+    await timetable.init();
+    await timetable.setSchool('군포e비즈니스고등학교');
+
+    // 시간표 조회
+    const result = await timetable.getTimetable();
+    
+    // 시간 조회
+    const time = await timetable.getClassTime();
+    
+    // 시간표 + 시간 정보 입력
+    const data = JSON.stringify(result) + JSON.stringify(time);
+
+    // unix timestamp
+    const dataTimeTable = Math.round((new Date()).getTime() / 1000);
+
+    // hash
+    const dataHash = (function hash("data") {
+       return crypto.createHmac('sha512', process.env.SCREAT_KEY).update(checksum).digest('hex');
+    });
+
+    let data = null;
+    try {
+        data = await
+    } catch (e) {
+        chx.throw(500, e);
+    }
+})();
 
 // API 라우팅
 router.use('/api', api.routes());

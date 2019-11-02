@@ -1,6 +1,5 @@
-// comcigan-parser
-const Timetable = require('comcigan-parser');
-const timetable = new Timetable();
+const timetable = require('../../models/timetable');
+const Joi = require('joi');
 
 /*
  * 시간표 불러오기
@@ -9,6 +8,28 @@ const timetable = new Timetable();
  */
 
 exports.getData = async (ctx) => {
+    // 데이터 검증
+    const schema = Joi.object().keys({
+        data: Joi.String().required(),
+        timetable: Joi.Number().required(),
+        checksum: Joi.String().required(),
+    });
+
+    const result = Joi.validate(ctx.request.body, schema);
+
+    // 스키마 검증 실패시
+    if (result.error) {
+        ctx.status = 400;
+        return false;
+    }
+
+    const timetable_raw = ctx.request.body;
+    const timetable = JSON.parse(timetable_raw);
+
+    console.log(timetable);
+
+
+    /*
     const schema = ctx.query;
     const dataGrade = Number(schema.queryGrade);
     const dataClass = Number(schema.queryClass);
@@ -22,7 +43,6 @@ exports.getData = async (ctx) => {
     // TODO : 컴시간표 API 서버의 응답이 올 때 까지 API 응답을 늦추기
     // TODO : 새로운 개발 API 만들기
 
-    /*
     var data = "";
 
     (async () => {

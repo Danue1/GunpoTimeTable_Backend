@@ -27,47 +27,16 @@ exports.getData = async (ctx) => {
     const timetable = JSON.parse(timetable_raw);
 
     console.log(timetable);
-
-
-    /*
-    const schema = ctx.query;
-    const dataGrade = Number(schema.queryGrade);
-    const dataClass = Number(schema.queryClass);
-
-    if (isNaN(dataGrade) || isNaN(dataClass)) {
-        ctx.status = 400; // Bad requset
-        return;
-    }
-
-    // 컴시간 정보 불러오기
-    // TODO : 새로운 개발 API 만들기
-
-    var data = "";
-
-    (async () => {
-        await timetable.init();
-        await timetable.setSchool('군포e비즈니스고등학교');
-
-        // 각 반의 정보 조회
-        const result = await timetable.getTimetable();
-        // console.log(JSON.stringify(result[dataGrade][dataClass]));
-
-        // 수업시간 정보 조회
-        const time = timetable.getClassTime();
-        // console.log(JSON.stringify(time));
-
-        data = JSON.stringify(result[dataGrade][dataClass]) + JSON.stringify(time);
-    })();
-
-    ctx.body = data;
-    */
-
 };
 
 /*
  * 시간표 덮어쓰기 (자동적으로 실행됨)
- * 조건 : localhost onlu
+ * 조건 : localhost only
  * 들어오는 쿼리 예시 :
+ * {
+ *     "data" : String,
+ *     "checksum" : String
+ * }
  */
 
 exports.insertData = async (ctx) => {

@@ -25,10 +25,10 @@ function hash(checksum) {
 
 // UNIX 타임스탬프 function
 function unixTime() {
-    Math.round((new Date()).getTime() / 1000);
+   return Math.round((new Date()).getTime() / 1000);
 }
 
-// timetable 업로드
+// DB에 시간표 업로드
 TimeTable.statics.addTableData = function ({ data, checksum }) {
     const query = new this({
         data : data,

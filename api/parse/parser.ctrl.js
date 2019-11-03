@@ -1,4 +1,4 @@
-const timetable = require('../../models/timetable');
+const TimeTable = require('../../models/timetable');
 const Joi = require('joi');
 
 /*
@@ -57,13 +57,12 @@ exports.insertData = async (ctx) => {
     let query = null;
 
     try {
-        // TODO : 왜 작동하지 않는지 알아내기
        query = await TimeTable.addTableData(ctx.request.body);
     } catch (e) {
         ctx.throw(500, e);
     }
 
-    ctx.body('success');
+    ctx.body= "success";
 
 
 };

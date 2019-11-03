@@ -5,40 +5,49 @@ const crypto = require('crypto');
 
 // 시간표 데이터 테이블 구성
 const TimeTable = new Schema({
-    DBtimetable: {
-        type: String
+    // 암호화 코드 (string)
+    checkSum : {
+        type: String,
     },
-    DBtime: {
-        type: String
-    },
-    timetable: {
-        type: Number
-    },
-    checksum: {
-        type: String
+    data: {
+        // 시간표 (String)
+        timeTable: {
+            type: String,
+        },
+        // 시정표 (string)
+        classTime: {
+            type: String,
+        },
+        // Unix 시간 (Number)
+        unixTime: {
+            type: Number,
+        },
     }
 });
 
-// 암호화 function
-function hash(checksum) {
-    return crypto.createHmac('sha512', process.env.SCREAT_KEY)
-        .update(checksum)
-        .digest('hex');
-};
-
-// UNIX 타임스탬프 function
+// unitTime function
 function unixTime() {
     return Math.round((new Date()).getTime() / 1000);
 }
 
-// DB에 시간표 업로드
-TimeTable.statics.addTableData = async function ({DBtimetable, DBtime, checksum}) {
+// hash Function
+function hash(checksum) {
+    return crypto.createHmac('sha512', process.env.SCREAT_KEY)
+        .update(checksum)
+        .digest('hex');
+}
+
+// Create : 시간표 정보 추가하기
+TimeTable.statics.addTableData = async function ({timetable, classtime, checksum}) {
     const query = new this({
-        DBtimetable: DBtimetable,
-        DBtime: DBtime,
-        timetable: unixTime(),
-        checksum: hash(checksum)
+        checksum: hash(unixTime() * process.env.CHECKSUM),
+        data: {
+            timeTable : timetable,
+            classTime : classtime,
+            unixTime : unixTime(),
+        }
     });
+
     return await query.save();
 };
 

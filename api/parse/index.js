@@ -3,6 +3,6 @@ const parse = new Router();
 const parseCtrl = require('./parser.ctrl');
 
 parse.post('/', parseCtrl.getData);
-parse.get('/test', parseCtrl.test);
+parse.post('/test', parseCtrl.insertData);
 
 module.exports = parse;

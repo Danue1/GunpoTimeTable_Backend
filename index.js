@@ -29,9 +29,6 @@ const router = new Router();
 const Timetable = require('comcigan-parser');
 const timetable = new Timetable();
 
-// sha 인코딩
-const crypto = require('crypto');
-
 // DB 연결
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL, {
@@ -66,6 +63,7 @@ app.listen(port, () => {
 });
 
 // DB에 업로드 하는 함수
+// TODO : 평일 오전 7시부터 10시까지 1시간 간격으로 실행시키는 기능 만들기
 (async () => {
     await timetable.init();
     await timetable.setSchool('군포e비즈니스고등학교');
@@ -79,21 +77,5 @@ app.listen(port, () => {
     // 시간표 + 시간 정보 입력
     const data = JSON.stringify(result) + JSON.stringify(time);
 
-    // unix timestamp
-    const dataTimeTable = Math.round((new Date()).getTime() / 1000);
-
-    // hash
-    const dataHash = function hash(checksum) {
-        return crypto.createHmac('sha512', process.env.SCREAT_KEY)
-            .update(checksum)
-            .digest('hex');
-    };
-
-    const query = {
-        "data" : data,
-        "timetable" : dataTimeTable,
-        "checksum" : dataHash
-    };
-    
-    // TODO : DB 업로드 하는 기능 구현하기
+    console.log(data);
 })();

@@ -40,7 +40,6 @@ exports.getData = async (ctx) => {
     }
 
     // 컴시간 정보 불러오기
-    // TODO : 컴시간표 API 서버의 응답이 올 때 까지 API 응답을 늦추기
     // TODO : 새로운 개발 API 만들기
 
     var data = "";
@@ -65,6 +64,37 @@ exports.getData = async (ctx) => {
 
 };
 
-exports.test = async (ctx) => {
-    ctx.body = 'test';
+/*
+ * 시간표 덮어쓰기 (자동적으로 실행됨)
+ * 조건 : localhost onlu
+ * 들어오는 쿼리 예시 :
+ */
+
+exports.insertData = async (ctx) => {
+    // 데이터 검증
+    const schema = Joi.object().keys({
+        data: Joi.string().required(),
+        checksum: Joi.string().required(),
+    });
+
+    const result = Joi.validate(ctx.request.body, schema);
+
+    // 스키마 검증 실패시
+    if (result.error) {
+        ctx.status = 400;
+        return false;
+    }
+
+    let query = null;
+
+    try {
+        // TODO : 왜 작동하지 않는지 알아내기
+       query = await TimeTable.addTableData(ctx.request.body);
+    } catch (e) {
+        ctx.throw(500, e);
+    }
+
+    ctx.body('success');
+
+
 };

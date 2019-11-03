@@ -66,16 +66,15 @@ exports.insertData = async (ctx) => {
  * }
  */
 exports.getData = async (ctx) => {
-    // 응답 데이터 검증
-
-
-    let query = null;
+    // 시간표 정보 불러오기
+    let data = null;
     try {
-        query = await TimeTable.readTableData();
+        data = await TimeTable.readTableData();
+        // 로그 저장은 models/timetabls.js 에서 동작함.
     } catch (error) {
         ctx.throw(500, error);
         // TODO : 에러 발생시 오류 로그 저장하는 기능 만들기
     }
 
-    ctx.body = "기능 추가 요함";
+    ctx.body = data;
 };

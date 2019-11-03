@@ -21,7 +21,9 @@ exports.insertData = async (ctx) => {
     }
 
     // 데이터 검증
+    // TODO : validation failed: _id: Cast to ObjectID failed for value "1" at path "_id" 버그 해결하기
     const schema = Joi.object().keys({
+        _id: Joi.number().required(),
         data : Joi.object().keys({
             // 시간표
             timeTable: Joi.string().required(),
@@ -79,6 +81,8 @@ exports.getData = async (ctx) => {
     // 데이터 검증
     // TODO : "\"$init\" is not allowed" 오류 해결하기
     const schema = Joi.object().keys({
+        // id
+        _id: Joi.number().required(),
         // checkSum
         checkSum: Joi.string().hex().required(),
         // data array
@@ -106,7 +110,7 @@ exports.getData = async (ctx) => {
 };
 
 /*
- * Read : 가장 최근 데이터의 _id 값을 리턴함
+ * Read : 가장 최근 데이터의 _id 값 불러오기
  * API 호출 : [POST/JSON] localhost:4001/api/parse/getidx/
  * API 응답 : Number
  */

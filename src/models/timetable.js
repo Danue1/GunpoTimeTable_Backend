@@ -38,8 +38,9 @@ function hash(checksum) {
 }
 
 // Create : 시간표 정보 추가하기
-TimeTable.statics.addTableData = async function ({"data": {timeTable, classTime}}) {
+TimeTable.statics.addTableData = async function ({_id, "data": {timeTable, classTime}}) {
     const query = new this({
+        _id: _id,
         checkSum: hash(process.env.CHECKSUM),
         data: {
             timeTable: timeTable,
@@ -59,6 +60,7 @@ TimeTable.statics.readTableData = async function () {
     return await this.findOne(null, {__v : 0});
 };
 
+// Read : 최근 시간표 idx 불러오기
 TimeTable.statics.readTableIdx = async function () {
     // _id 만 리턴
     return await this.findOne(null, {checkSum : 0, data : 0, __v : 0});

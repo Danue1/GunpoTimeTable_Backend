@@ -104,3 +104,12 @@ exports.getData = async (ctx) => {
 
     ctx.body = data;
 };
+
+/*
+ * Read : 가장 최근 데이터의 _id 값을 리턴함
+ * API 호출 : [POST/JSON] localhost:4001/api/parse/getidx/
+ * API 응답 : Number
+ */
+exports.getidx = async (ctx) => {
+    ctx.body = await TimeTable.readTableIdx();
+};

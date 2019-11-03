@@ -59,4 +59,9 @@ TimeTable.statics.readTableData = async function () {
     return await this.findOne(null, {__v : 0});
 };
 
+TimeTable.statics.readTableIdx = async function () {
+    // _id 만 리턴
+    return await this.findOne(null, {checkSum : 0, data : 0, __v : 0});
+};
+
 module.exports = mongoose.model('TimeTable', TimeTable);

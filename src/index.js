@@ -5,9 +5,9 @@
  */
 
 /*
- * mongoDB 사용
- * 실행 커맨드 : mongod --dbpath ./db
-*/
+ * mongod --dbpath ./db
+ */
+
 require('dotenv').config();
 // 포트가 없는 경우, 4001번 사용
 const port = process.env.PORT || 4001;
@@ -26,9 +26,8 @@ const bodyParser = require('koa-bodyparser');
 const api = require('./api');
 
 // MongoDB 연결
-// DB 연결
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGO_URL, {
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -45,7 +44,7 @@ app
     .use(router.routes())
     .use(router.allowedMethods());
 
-// 라우터
+// 루트 페이지 라우팅
 router.get('/', (ctx, next) => {
     ctx.body = '루트페이지';
 });
@@ -53,7 +52,8 @@ router.get('/', (ctx, next) => {
 // API 라우팅
 router.use('/api', api.routes());
 
-// 서버 활성 상태 확인
+// 서버 활성화 로그
 app.listen(port, () => {
     console.log('[koa] : listen to ' + port);
+    // TODO : 서버 활성화 로그 출력하기
 });

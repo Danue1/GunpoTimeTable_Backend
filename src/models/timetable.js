@@ -42,6 +42,7 @@ TimeTable.statics.addTableData = async function ({DBtimetable, DBtime, checksum}
     return await query.save();
 };
 
+// Read : 시간표 정보 읽기
 TimeTable.statics.readTableData = async function () {
     return await this.find();
 };

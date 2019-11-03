@@ -2,10 +2,10 @@ const TimeTable = require('../../models/timetable');
 const Joi = require('joi');
 
 /*
- * 시간표 불러오기
- * 들어오는 쿼리 예시 : localhost:4001/api/parse/?dataGrade=1&dataClass=4
- * 기록되는 쿼리 : [Object: null prototype] { queryGrade: '1', queryClass: '4' }
- */
+ * Create : 테이블 새로 추가하기
+ * 조건 : localhost만 사용 가능함.
+ * API 호출 : [POST/JSON] localhost:4001/api/parse/test/
+ * API 응답 :
 exports.getData = async (ctx) => {
     // 데이터 검증
     let query = null;
@@ -89,3 +89,15 @@ exports.insertData = async (ctx) => {
 
     ctx.body = ctx.request.body;
 };
+
+/*
+ * Read : 시간표 불러오기
+ * API 호출 : [Get] localhost:4001/api/parse/get
+ * API 응답 :
+ * {
+ *     DBtimetable: String,
+ *     DBtime : String,
+ *     timetabla : Number,
+ *     checksum : String
+ * }
+ */

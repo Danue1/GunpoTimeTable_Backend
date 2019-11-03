@@ -22,10 +22,12 @@ exports.insertData = async (ctx) => {
 
     // 데이터 검증
     const schema = Joi.object().keys({
-        // 시간표
-        timeTable: Joi.string().required(),
-        // 시정표
-        classTime: Joi.string().required(),
+        data : Joi.object().keys({
+            // 시간표
+            timeTable: Joi.string().required(),
+            // 시정표
+            classTime: Joi.string().required()
+        }).required()
     });
 
     const result = Joi.validate(ctx.request.body, schema);

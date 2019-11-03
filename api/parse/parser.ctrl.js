@@ -32,6 +32,7 @@ exports.getData = async (ctx) => {
 /*
  * 시간표 덮어쓰기 (자동적으로 실행됨)
  * 조건 : localhost only
+ * API 링크 : [POST] localhost:4001/api/parse/test/
  * 들어오는 쿼리 예시 :
  * {
  *     "data" : String,
@@ -40,6 +41,16 @@ exports.getData = async (ctx) => {
  */
 
 exports.insertData = async (ctx) => {
+
+    console.log(ctx);
+
+    // 외부에서 Data 삽입시 403 (forbidden)
+    let ref = ctx.request.header.host;
+    if (ref !== "localhost:4001" && ref !== "127.0.0.1:4001") {
+        ctx.status = 403;
+        return false;
+    }
+
     // 데이터 검증
     const schema = Joi.object().keys({
         data: Joi.string().required(),
@@ -48,14 +59,14 @@ exports.insertData = async (ctx) => {
 
     const result = Joi.validate(ctx.request.body, schema);
 
-    // 스키마 검증 실패시
+    // 스키마 검증 실패시 400 (Bad Request)
     if (result.error) {
         ctx.status = 400;
         return false;
     }
-
+    
+    // DB에 업로드
     let query = null;
-
     try {
        query = await TimeTable.addTableData(ctx.request.body);
     } catch (e) {

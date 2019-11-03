@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-// sha 인코딩
+// SHA-256 인코딩 해주는 함수
 const crypto = require('crypto');
 
 // 시간표 데이터 테이블 구성
@@ -32,27 +32,33 @@ function unixTime() {
 
 // hash Function
 function hash(checksum) {
-    return crypto.createHmac('sha512', process.env.SCREAT_KEY)
+    return crypto.createHmac('sha512', process.env.HASH_KEY)
         .update(checksum)
         .digest('hex');
 }
 
 // Create : 시간표 정보 추가하기
-TimeTable.statics.addTableData = async function ({timetable, classtime, checksum}) {
+TimeTable.statics.addTableData = async function ({timeTable, classTime}) {
+    // TODO : 정보가 들어오지 않는 버그 고치기
+    console.log(timeTable + '/' + classTime);
     const query = new this({
-        checksum: hash(unixTime() * process.env.CHECKSUM),
+        checksum: hash(process.env.CHECKSUM),
         data: {
-            timeTable : timetable,
-            classTime : classtime,
+            timeTable : timeTable,
+            classTime : classTime,
             unixTime : unixTime(),
-        }
+        },
     });
 
-    return await query.save();
+    // TODO : 쿼리 업로드시 정상 로그 저장하는 기능 만들기
+    console.log(query);
+    return query;
+    // return await query.save();
 };
 
 // Read : 시간표 정보 읽기
 TimeTable.statics.readTableData = async function () {
+    // TODO : 정보를 불러올 때 정상 로그 저장하는 기능 만들기
     return await this.find();
 };
 

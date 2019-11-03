@@ -55,5 +55,5 @@ router.use('/api', api.routes());
 // 서버 활성화 로그
 app.listen(port, () => {
     console.log('[koa] : listen to ' + port);
-    // TODO : 서버 활성화 로그 출력하기
+    // TODO : 서버 활성화시 로그 저장하는 기능 만들기
 });

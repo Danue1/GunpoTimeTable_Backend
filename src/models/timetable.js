@@ -6,7 +6,7 @@ const crypto = require('crypto');
 // 시간표 데이터 테이블 구성
 const TimeTable = new Schema({
     // 암호화 코드 (string)
-    checkSum : {
+    checkSum: {
         type: String,
     },
     data: {
@@ -39,21 +39,17 @@ function hash(checksum) {
 
 // Create : 시간표 정보 추가하기
 TimeTable.statics.addTableData = async function ({timeTable, classTime}) {
-    // TODO : 정보가 들어오지 않는 버그 고치기
-    console.log(timeTable + '/' + classTime);
     const query = new this({
-        checksum: hash(process.env.CHECKSUM),
+        checkSum: hash(process.env.CHECKSUM),
         data: {
-            timeTable : timeTable,
-            classTime : classTime,
-            unixTime : unixTime(),
+            timeTable: timeTable,
+            classTime: classTime,
+            unixTime: unixTime(),
         },
     });
 
     // TODO : 쿼리 업로드시 정상 로그 저장하는 기능 만들기
-    console.log(query);
-    return query;
-    // return await query.save();
+    return await query.save();
 };
 
 // Read : 시간표 정보 읽기

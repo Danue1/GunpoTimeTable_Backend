@@ -4,12 +4,10 @@ const Joi = require('joi');
 /*
  * Create : 테이블 새로 추가하기
  * 조건 : localhost만 사용 가능함.
- * API 호출 : [POST/JSON] localhost:4001/api/parse/test/
+ * API 호출 : [POST/JSON] localhost:4001/api/parse/insert/
  *  {
- *      data: {
- *          "timeTable": String,
- *          "classTime": String
- *      }
+ *      "timeTable": String,
+ *      "classTime": String
  *  }
  * API 응답 : [200] Success
  */
@@ -24,12 +22,10 @@ exports.insertData = async (ctx) => {
 
     // 데이터 검증
     const schema = Joi.object().keys({
-        data: {
-            // 시간표
-            timeTable: Joi.string().required(),
-            // 시정표
-            clasTime: Joi.string().required(),
-        }
+        // 시간표
+        timeTable: Joi.string().required(),
+        // 시정표
+        classTime: Joi.string().required(),
     });
 
     const result = Joi.validate(ctx.request.body, schema);
@@ -45,7 +41,6 @@ exports.insertData = async (ctx) => {
     let query = null;
     try {
         query = await TimeTable.addTableData(ctx.request.body);
-        console.log(query);
         // 로그 저장은 models/timetabls.js 에서 동작함.
     } catch (error) {
         ctx.throw(500, error);
@@ -79,6 +74,6 @@ exports.getData = async (ctx) => {
         ctx.throw(500, error);
         // TODO : 에러 발생시 오류 로그 저장하는 기능 만들기
     }
-    
+
     ctx.body = "기능 추가 요함";
 };

@@ -76,5 +76,31 @@ exports.getData = async (ctx) => {
         // TODO : 에러 발생시 오류 로그 저장하는 기능 만들기
     }
 
+    // 데이터 검증
+    // TODO : "\"$init\" is not allowed" 오류 해결하기
+    const schema = Joi.object().keys({
+        // checkSum
+        checkSum: Joi.string().required(),
+        // data array
+        data: Joi.object().keys({
+            // 시간표
+            timeTable: Joi.string().required(),
+            // 시정표
+            classTime: Joi.string().required(),
+            // Unix 타임스탬프
+            unixTime: Joi.number().required()
+        }).required()
+    });
+
+    const result = Joi.validate(data, schema);
+
+    // 스키마 검증 실패시 400 (Bad Request)
+    if (result.error) {
+        ctx.status = 400;
+        ctx.body = result.error;
+        // TODO : 검증 실패시 오류 로그 저장하는 기능 만들기
+        return false;
+    }
+
     ctx.body = data;
 };

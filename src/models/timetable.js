@@ -55,7 +55,7 @@ TimeTable.statics.addTableData = async function ({"data": {timeTable, classTime}
 // Read : 시간표 정보 읽기
 TimeTable.statics.readTableData = async function () {
     // TODO : 정보를 불러올 때 정상 로그 저장하는 기능 만들기
-    return await this.find();
+    return await this.findOne();
 };
 
 module.exports = mongoose.model('TimeTable', TimeTable);

@@ -80,7 +80,7 @@ exports.getData = async (ctx) => {
     // TODO : "\"$init\" is not allowed" 오류 해결하기
     const schema = Joi.object().keys({
         // checkSum
-        checkSum: Joi.string().required(),
+        checkSum: Joi.string().hex().required(),
         // data array
         data: Joi.object().keys({
             // 시간표

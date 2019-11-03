@@ -35,7 +35,8 @@ TimeTable.statics.addTableData = function ({ data, checksum }) {
         timetable : unixTime(),
         checksum : hash(checksum)
     });
-
+    console.log(query);
+    // TODO : 쿼리를 DB에 저장하는 함수 추가하기
     return query.save();
 };
 

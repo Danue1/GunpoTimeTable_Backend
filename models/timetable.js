@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 // sha 인코딩
 const crypto = require('crypto');
 
@@ -29,15 +29,14 @@ function unixTime() {
 }
 
 // DB에 시간표 업로드
-TimeTable.statics.addTableData = function ({ data, checksum }) {
+TimeTable.statics.addTableData = async  function ({ data, checksum }) {
     const query = new this({
         data : data,
         timetable : unixTime(),
         checksum : hash(checksum)
     });
-    console.log(query);
-    // TODO : 쿼리를 DB에 저장하는 함수 추가하기
-    return query.save();
+    // console.log(query);
+    return await query.save();
 };
 
 module.exports = mongoose.model('TimeTable', TimeTable);

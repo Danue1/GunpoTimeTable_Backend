@@ -32,7 +32,7 @@ exports.getData = async (ctx) => {
 /*
  * 시간표 덮어쓰기 (자동적으로 실행됨)
  * 조건 : localhost only
- * API 링크 : [POST] localhost:4001/api/parse/test/
+ * API 링크 : [POST/JSON] localhost:4001/api/parse/test/
  * 들어오는 쿼리 예시 :
  * {
  *     "data" : String,
@@ -42,7 +42,7 @@ exports.getData = async (ctx) => {
 
 exports.insertData = async (ctx) => {
 
-    console.log(ctx);
+    // console.log(ctx);
 
     // 외부에서 Data 삽입시 403 (forbidden)
     let ref = ctx.request.header.host;
@@ -74,6 +74,4 @@ exports.insertData = async (ctx) => {
     }
 
     ctx.body= "success";
-
-
 };

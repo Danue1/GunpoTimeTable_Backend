@@ -77,5 +77,5 @@ app.listen(port, () => {
     // 시간표 + 시간 정보 입력
     const data = JSON.stringify(result) + JSON.stringify(time);
 
-    console.log(data);
+    // console.log(data);
 })();

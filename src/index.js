@@ -1,6 +1,6 @@
 /*
  * GunpoTimeTable Backend
- * v 0.0.1 (2019-11-02)
+ * v 0.0.2 (2019-11-02)
  * https://github.com/notkimwol/GunpoTimeTable_BackEnd.git
  */
 

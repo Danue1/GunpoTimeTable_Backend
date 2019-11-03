@@ -29,6 +29,12 @@ const router = new Router();
 const Timetable = require('comcigan-parser');
 const timetable = new Timetable();
 
+// http 리퀘스트에 사용될 request 모듈 (https://medium.com/harrythegreat/node-js%EC%97%90%EC%84%9C-request-js-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-28744c52f68d)
+const request = require('request');
+
+// 자동화에 사용될 cron 모듈 (https://hudi.kr/node-cron%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-node-js%EC%97%90%EC%84%9C-%ED%8A%B9%EC%A0%95-%EC%9E%91%EC%97%85%EC%97%90-%EC%8A%A4%EC%BC%80%EC%A4%84-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0/)
+var cron = require('node-cron');
+
 // DB 연결
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL, {
@@ -37,6 +43,7 @@ mongoose.connect(process.env.MONGO_URL, {
 })
     .then(response => {
         console.log('[mongoDB] : success');
+        hello();
     })
     .catch(error => {
         console.log('[mongoDB] : ' + error);
@@ -64,18 +71,41 @@ app.listen(port, () => {
 
 // DB에 업로드 하는 함수
 // TODO : 평일 오전 7시부터 10시까지 1시간 간격으로 실행시키는 기능 만들기
-(async () => {
-    await timetable.init();
-    await timetable.setSchool('군포e비즈니스고등학교');
+function hello() {
+    (async () => {
+        await timetable.init();
+        await timetable.setSchool('군포e비즈니스고등학교');
 
-    // 시간표 조회
-    const result = await timetable.getTimetable();
+        // 시간표 조회
+        const result = await timetable.getTimetable();
 
-    // 시간 조회
-    const time = await timetable.getClassTime();
+        // 시간 조회
+        const time = await timetable.getClassTime();
 
-    // 시간표 + 시간 정보 입력
-    const data = JSON.stringify(result) + JSON.stringify(time);
+        // 시간표 + 시간 정보 입력
+        const DBtimetable = JSON.stringify(result);
+        const DBtime = JSON.stringify(time);
 
-    // console.log(data);
-})();
+        // console.log(data);
+
+        // TODO : data를 API에 실어 보내기
+        let options = {
+            uri: "http://127.0.0.1:4001/api/parse/insert",
+            method: "POST",
+            body: {
+                "DBtimetable": DBtimetable,
+                "DBtime": DBtime,
+                "checksum": process.env.CHECKSUM
+            },
+            json:true
+        };
+        request.post(options, function (error, response, body) {
+            if (error) {
+                console.log('[AutoInsert] error : ' + error)
+            } else {
+                console.log('[AutoInsert] statusCode : ' + response.statusCode);
+                console.log('[AutoInsert] body : ' + body);
+            }
+        });
+    })();
+}

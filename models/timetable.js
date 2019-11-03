@@ -5,8 +5,11 @@ const crypto = require('crypto');
 
 // 시간표 데이터 테이블 구성
 const TimeTable = new Schema({
-    data : {
+    DBtimetable : {
         type : String
+    },
+    DBtime : {
+      type : String
     },
     timetable : {
         type : Number

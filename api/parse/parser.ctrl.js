@@ -6,18 +6,25 @@ const Joi = require('joi');
  * 들어오는 쿼리 예시 : localhost:4001/api/parse/?dataGrade=1&dataClass=4
  * 기록되는 쿼리 : [Object: null prototype] { queryGrade: '1', queryClass: '4' }
  */
-
 exports.getData = async (ctx) => {
     // 데이터 검증
+    /*
+     * DBtimetable : 시간표 정보
+     * time : 시정 시간 정보
+     * timetable : UNIX 타임테이블
+     * checksum : 체크섬
+     */
+    // TODO : checksum 더 개선하기
     const schema = Joi.object().keys({
-        data: Joi.String().required(),
+        DBtimetable: Joi.String().required(),
+        DBtime: Joi.String().required(),
         timetable: Joi.Number().required(),
         checksum: Joi.String().required(),
     });
 
     const result = Joi.validate(ctx.request.body, schema);
 
-    // 스키마 검증 실패시
+    // 스키마 검증 실패시 Bad Request
     if (result.error) {
         ctx.status = 400;
         return false;
@@ -26,7 +33,6 @@ exports.getData = async (ctx) => {
     const timetable_raw = ctx.request.body;
     const timetable = JSON.parse(timetable_raw);
 
-    console.log(timetable);
 };
 
 /*
@@ -35,13 +41,12 @@ exports.getData = async (ctx) => {
  * API 링크 : [POST/JSON] localhost:4001/api/parse/test/
  * 들어오는 쿼리 예시 :
  * {
- *     "data" : String,
+ *     "DBtimetable" : String,
+ *     "DBttime" : String,
  *     "checksum" : String
  * }
  */
-
 exports.insertData = async (ctx) => {
-
     // console.log(ctx);
 
     // 외부에서 Data 삽입시 403 (forbidden)
@@ -53,7 +58,8 @@ exports.insertData = async (ctx) => {
 
     // 데이터 검증
     const schema = Joi.object().keys({
-        data: Joi.string().required(),
+        DBtimetable: Joi.string().required(),
+        DBtime: Joi.string().required(),
         checksum: Joi.string().required(),
     });
 

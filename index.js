@@ -13,6 +13,10 @@ require('dotenv').config();
 const port = process.env.PORT || 4001;
 const mongoose = require('mongoose');
 
+// API에 사용되는 koa-bodyparser 모듈
+const bodyParser = require('koa-bodyparser');
+const api = require('./api');
+
 // 미들웨어로 사용할 koa
 const koa = require('koa');
 const app = new koa();
@@ -21,22 +25,17 @@ const app = new koa();
 const Router = require("koa-router");
 const router = new Router();
 
-/* 주로 사용될 comcigan-parser
- * https://github.com/leegeunhyeok/comcigan-parser.git
- */
+// comcigan-parser (https://github.com/leegeunhyeok/comcigan-parser)
 const Timetable = require('comcigan-parser');
 const timetable = new Timetable();
 
-/*
- * 경로의 값을 알아오는 방법 : ctx.params
- * 쿼리 스트링일 경우 : ctx.requset.query
- * 
- *
- */
+// http 리퀘스트에 사용될 request 모듈 (https://medium.com/harrythegreat/node-js%EC%97%90%EC%84%9C-request-js-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-28744c52f68d)
+const request = require('request');
+
+// 자동화에 사용될 cron 모듈 (https://hudi.kr/node-cron%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-node-js%EC%97%90%EC%84%9C-%ED%8A%B9%EC%A0%95-%EC%9E%91%EC%97%85%EC%97%90-%EC%8A%A4%EC%BC%80%EC%A4%84-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0/)
+var cron = require('node-cron');
 
 // DB 연결
-/*
-TODO : 스키마 작업 완료 하고 주석 풀기
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
@@ -44,25 +43,66 @@ mongoose.connect(process.env.MONGO_URL, {
 })
     .then(response => {
         console.log('[mongoDB] : success');
+        hello();
     })
     .catch(error => {
         console.log('[mongoDB] : ' + error);
     });
-*/
+
+
+// 라우팅 설정
+app
+    .use(bodyParser())
+    .use(router.routes())
+    .use(router.allowedMethods());
 
 // 라우터
 router.get('/', (ctx, next) => {
     ctx.body = '루트페이지';
 });
 
-router.get('/sub', (ctx, next) => {
-    ctx.body = '서브페이지';
+// API 라우팅
+router.use('/api', api.routes());
+
+// 서버 활성 상태 확인
+app.listen(port, () => {
+    console.log('[koa] : listen to ' + port);
 });
 
-app.use(router.routes());
-app.use(router.allowedMethods());
+// DB에 업로드 하는 함수
+// TODO : 평일 오전 7시부터 10시까지 1시간 간격으로 실행시키는 기능 만들기
+function hello() {
+    (async () => {
+        await timetable.init();
+        await timetable.setSchool('군포e비즈니스고등학교');
 
-// api 호출 부분
-app.listen(4000, ()=>{
-   console.log('[koa] : success');
-});
+        // 시간표 조회
+        const result = await timetable.getTimetable();
+
+        // 시간 조회
+        const time = await timetable.getClassTime();
+
+        // 시간표 + 시간 정보 입력
+        const DBtimetable = JSON.stringify(result);
+        const DBtime = JSON.stringify(time);
+
+        let options = {
+            uri: "http://127.0.0.1:4001/api/parse/insert",
+            method: "POST",
+            body: {
+                "DBtimetable": DBtimetable,
+                "DBtime": DBtime,
+                "checksum": process.env.CHECKSUM
+            },
+            json: true
+        };
+        request.post(options, function (error, response, body) {
+            if (error) {
+                console.log('[AutoInsert] error : ' + error)
+            } else {
+                console.log('[AutoInsert] statusCode : ' + response.statusCode);
+                console.log('[AutoInsert] body : ' + body);
+            }
+        });
+    })();
+}

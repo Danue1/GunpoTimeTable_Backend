@@ -86,9 +86,6 @@ function hello() {
         const DBtimetable = JSON.stringify(result);
         const DBtime = JSON.stringify(time);
 
-        // console.log(data);
-
-        // TODO : data를 API에 실어 보내기
         let options = {
             uri: "http://127.0.0.1:4001/api/parse/insert",
             method: "POST",
@@ -97,7 +94,7 @@ function hello() {
                 "DBtime": DBtime,
                 "checksum": process.env.CHECKSUM
             },
-            json:true
+            json: true
         };
         request.post(options, function (error, response, body) {
             if (error) {

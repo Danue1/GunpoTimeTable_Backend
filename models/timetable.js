@@ -5,17 +5,17 @@ const crypto = require('crypto');
 
 // 시간표 데이터 테이블 구성
 const TimeTable = new Schema({
-    DBtimetable : {
-        type : String
+    DBtimetable: {
+        type: String
     },
-    DBtime : {
-      type : String
+    DBtime: {
+        type: String
     },
-    timetable : {
-        type : Number
+    timetable: {
+        type: Number
     },
-    checksum : {
-        type : String
+    checksum: {
+        type: String
     }
 });
 
@@ -28,18 +28,22 @@ function hash(checksum) {
 
 // UNIX 타임스탬프 function
 function unixTime() {
-   return Math.round((new Date()).getTime() / 1000);
+    return Math.round((new Date()).getTime() / 1000);
 }
 
 // DB에 시간표 업로드
-TimeTable.statics.addTableData = async  function ({ data, checksum }) {
+TimeTable.statics.addTableData = async function ({DBtimetable, DBtime, checksum}) {
     const query = new this({
-        data : data,
-        timetable : unixTime(),
-        checksum : hash(checksum)
+        DBtimetable: DBtimetable,
+        DBtime: DBtime,
+        timetable: unixTime(),
+        checksum: hash(checksum)
     });
-    // console.log(query);
     return await query.save();
+};
+
+TimeTable.statics.readTableData = async function () {
+    return await this.find();
 };
 
 module.exports = mongoose.model('TimeTable', TimeTable);

@@ -8,6 +8,14 @@ const Joi = require('joi');
  */
 exports.getData = async (ctx) => {
     // 데이터 검증
+    let query = null;
+    try {
+        query = await TimeTable.readTableData();
+    } catch (e) {
+        ctx.throw(500, e);
+    }
+    
+    // TODO 아래 코드 활성화 시키기
     /*
      * DBtimetable : 시간표 정보
      * time : 시정 시간 정보
@@ -15,6 +23,7 @@ exports.getData = async (ctx) => {
      * checksum : 체크섬
      */
     // TODO : checksum 더 개선하기
+    /*
     const schema = Joi.object().keys({
         DBtimetable: Joi.String().required(),
         DBtime: Joi.String().required(),
@@ -32,7 +41,8 @@ exports.getData = async (ctx) => {
 
     const timetable_raw = ctx.request.body;
     const timetable = JSON.parse(timetable_raw);
-
+*/
+    ctx.body = query;
 };
 
 /*
@@ -47,8 +57,6 @@ exports.getData = async (ctx) => {
  * }
  */
 exports.insertData = async (ctx) => {
-    // console.log(ctx);
-
     // 외부에서 Data 삽입시 403 (forbidden)
     let ref = ctx.request.header.host;
     if (ref !== "localhost:4001" && ref !== "127.0.0.1:4001") {
@@ -70,14 +78,14 @@ exports.insertData = async (ctx) => {
         ctx.status = 400;
         return false;
     }
-    
+
     // DB에 업로드
     let query = null;
     try {
-       query = await TimeTable.addTableData(ctx.request.body);
+        query = await TimeTable.addTableData(ctx.request.body);
     } catch (e) {
         ctx.throw(500, e);
     }
 
-    ctx.body= "success";
+    ctx.body = ctx.request.body;
 };

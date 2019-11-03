@@ -4,7 +4,6 @@
   "description": "backend",
   "main": "src/index.js",
   "dependencies": {
-    "comcigan-parser": "^0.2.0",
     "dotenv": "^8.2.0",
     "eslint": "^6.6.0",
     "joi": "^14.3.1",

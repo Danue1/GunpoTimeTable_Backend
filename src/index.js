@@ -46,6 +46,7 @@ app
 
 // 루트 페이지 라우팅
 router.get('/', (ctx, next) => {
+    // TODO : 루트 페이지를 프론트와 연동하기
     ctx.body = '루트페이지';
 });
 

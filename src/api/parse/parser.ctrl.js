@@ -85,5 +85,6 @@ exports.getData = async (ctx) => {
  * API 응답 : Number
  */
 exports.getidx = async (ctx) => {
+    // TODO : Get 파라미터로 숫자 (n) 이 들어오면 n 번째 쿼리 리턴하는 기능 만들기 (0.0.6)
     ctx.body = await TimeTable.readTableIdx();
 };

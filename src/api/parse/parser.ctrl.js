@@ -54,7 +54,7 @@ exports.insertData = async (ctx) => {
 
 /*
  * Read : 시간표 불러오기
- * API 호출 : [Get] localhost:4001/api/parse/get
+ * API 호출 : [Get] localhost:4001/api/parse/getdata/
  * API 응답 :
  * {
  *      checkSum : String,

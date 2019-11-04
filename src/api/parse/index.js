@@ -6,7 +6,7 @@ const parseCtrl = require('./parser.ctrl');
 parse.post('/insert', parseCtrl.insertData);
 
 // Get All Table Data
-parse.get('/get', parseCtrl.getData);
+parse.get('/getdata', parseCtrl.getData);
 
 // Get Recent Table ID
 parse.get('/getidx', parseCtrl.getidx);

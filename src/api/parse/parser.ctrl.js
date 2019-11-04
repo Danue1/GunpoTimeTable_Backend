@@ -3,7 +3,7 @@ const Joi = require('joi');
 
 /*
  * Create : 테이블 새로 추가하기
- * 조건 : localhost만 사용 가능함.
+ * 조건 : localhost 또는 127.0.0.1만 사용 가능함.
  * API 호출 : [POST/JSON] localhost:4001/api/parse/insert/
  *  {
  *      "timeTable": String,
@@ -21,10 +21,8 @@ exports.insertData = async (ctx) => {
     }
 
     // 데이터 검증
-    // TODO : validation failed: _id: Cast to ObjectID failed for value "1" at path "_id" 버그 해결하기
     const schema = Joi.object().keys({
-        _id: Joi.number().required(),
-        data : Joi.object().keys({
+        data: Joi.object().keys({
             // 시간표
             timeTable: Joi.string().required(),
             // 시정표
@@ -76,34 +74,6 @@ exports.getData = async (ctx) => {
     } catch (error) {
         ctx.throw(500, error);
         // TODO : 에러 발생시 오류 로그 저장하는 기능 만들기
-    }
-
-    // 데이터 검증
-    // TODO : "\"$init\" is not allowed" 오류 해결하기
-    const schema = Joi.object().keys({
-        // id
-        _id: Joi.number().required(),
-        // checkSum
-        checkSum: Joi.string().hex().required(),
-        // data array
-        data: Joi.object().keys({
-            // 시간표
-            timeTable: Joi.string().required(),
-            // 시정표
-            classTime: Joi.string().required(),
-            // Unix 타임스탬프
-            unixTime: Joi.number().required()
-        }).required()
-    });
-
-    const result = Joi.validate(data, schema);
-
-    // 스키마 검증 실패시 400 (Bad Request)
-    if (result.error) {
-        ctx.status = 400;
-        ctx.body = result.error;
-        // TODO : 검증 실패시 오류 로그 저장하는 기능 만들기
-        return false;
     }
 
     ctx.body = data;

@@ -38,9 +38,8 @@ function hash(checksum) {
 }
 
 // Create : 시간표 정보 추가하기
-TimeTable.statics.addTableData = async function ({_id, "data": {timeTable, classTime}}) {
+TimeTable.statics.addTableData = async function ({"data": {timeTable, classTime}}) {
     const query = new this({
-        _id: _id,
         checkSum: hash(process.env.CHECKSUM),
         data: {
             timeTable: timeTable,

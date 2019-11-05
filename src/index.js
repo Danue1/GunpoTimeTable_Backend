@@ -9,28 +9,22 @@
  */
 
 require('dotenv').config();
-// 포트가 없는 경우, 4001번 사용
-const port = process.env.PORT || 4001;
+
 const mongoose = require('mongoose');
-
-// 미들웨어로 사용할 koa
 const koa = require('koa');
-const app = new koa();
-
-// 라우팅에 사용될 koa-router
-const Router = require("koa-router");
-const router = new Router();
-
-// API에 사용되는 koa-bodyparser 모듈
+const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
 const api = require('./api');
 
+const port = process.env.PORT || 4001;
+
 // MongoDB 연결
-mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.Promise = Promise;
+mongoose
+    .connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
     .then(response => {
         console.log('[mongoDB] : success');
     })
@@ -38,9 +32,11 @@ mongoose.connect(process.env.MONGO_URI, {
         console.log('[mongoDB] : ' + error);
     });
 
+const app = new koa();
+const router = new Router();
+
 // 라우팅 설정
-app
-    .use(bodyParser())
+app.use(bodyParser())
     .use(router.routes())
     .use(router.allowedMethods());
 
